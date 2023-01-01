@@ -1,14 +1,14 @@
-exports.ox_target:addBoxZone({
+exports.ox_target:addSphereZone({
     coords = vec3(-249.4758, -963.1530, 31.2200),
     size = vec3(2, 2, 2),
     rotation = 257.0,
-    debug = true,
+    debug = false,
     options = {
         {
             name = 'open_jobcenter',
             event = 'shy_jobcenter:open',
             icon = 'fa-solid fa-suitcase',
-            label = 'Talk with lady'
+            label = 'Talk with guy'
         }
     }
 })
@@ -35,7 +35,7 @@ RegisterNetEvent('shy_jobcenter:open', function(job)
         title = 'Job center',
         onExit = function()
             lib.notify({
-                title = 'Job center lady',
+                title = 'Job center guy',
                 description = 'Thank you for your stoppping by',
                 type = 'success'
             })
@@ -46,7 +46,7 @@ RegisterNetEvent('shy_jobcenter:open', function(job)
                 description = 'SHOOT HIM !',
                 onSelect = function(args)
                     lib.notify({
-                        title = 'Job center lady',
+                        title = 'Job center guy',
                         description = 'Thank you for choosing this job !',
                         type = 'success'
                     })
@@ -58,7 +58,7 @@ RegisterNetEvent('shy_jobcenter:open', function(job)
                 description = 'Clean it !',
                 onSelect = function(args)
                     lib.notify({
-                        title = 'Job center lady',
+                        title = 'Job center guy',
                         description = 'Thank you for choosing this job !',
                         type = 'success'
                     })
@@ -70,7 +70,7 @@ RegisterNetEvent('shy_jobcenter:open', function(job)
                 description = 'Pick it !',
                 onSelect = function(args)
                     lib.notify({
-                        title = 'Job center lady',
+                        title = 'Job center guy',
                         description = 'Thank you for choosing this job !',
                         type = 'success'
                     })
@@ -80,4 +80,23 @@ RegisterNetEvent('shy_jobcenter:open', function(job)
         }
     })
     lib.showContext('jobcenter_menu')
+end)
+
+Citizen.CreateThread(function()
+    for _, item in pairs(Config.PedSpawn) do
+        local npc2 = CreatePed(4, GetHashKey(Config.ped), item.x, item.y, item.z, item.heading, false, true)
+        
+        FreezeEntityPosition(npc2, true)	
+        SetEntityHeading(npc2, item.heading)
+        SetEntityInvincible(npc2, true)
+        genderNum = 4
+        SetBlockingOfNonTemporaryEvents(npc2, true)
+        RequestAnimDict("anim@amb@nightclub@peds@")
+        while not HasAnimDictLoaded("anim@amb@nightclub@peds@") do
+        Citizen.Wait(1000)
+        end
+        
+            Citizen.Wait(200)	
+        TaskPlayAnim(npc2,"anim@amb@nightclub@peds@","amb_world_human_stand_guard_male_base",1.0, 1.0, -1, 9, 1.0, 0, 0, 0)
+    end
 end)
